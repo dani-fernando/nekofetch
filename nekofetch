@@ -1,0 +1,111 @@
+#!/bin/bash
+
+# ==============================
+# Nekofetch v1.0 by Dani Fernando
+# The Kawaii System Info Tool~
+# MIT License - Copyright (c)
+# ==============================
+
+# 🌸 Theme Sakura
+BABY_PINK='\033[38;5;218m'
+COTTON_CANDY='\033[38;5;219m'
+PEACH_CREAM='\033[38;5;224m'
+SOFT_MINT='\033[38;5;158m'
+LAVENDER_DREAM='\033[38;5;183m'
+POWDER_BLUE='\033[38;5;153m'
+VANILLA='\033[38;5;230m'
+WHITE='\033[37m'
+RESET='\033[0m'
+
+# ✨ Help Function
+show_help() {
+    echo -e "${BABY_PINK}"
+    echo -e "   🌸 Nekofetch Help Menu 🌸"
+    echo -e "${PEACH_CREAM}   •••••••••••••••••••••••••••••${RESET}"
+    echo -e ""
+    echo -e "${SOFT_MINT}   Description:${WHITE}"
+    echo -e "${VANILLA}   A kawaii system information tool"
+    echo -e "   with sakura pastel theme"
+    echo -e ""
+    echo -e "${SOFT_MINT}   Developer:${WHITE}"
+    echo -e "${VANILLA}   Dani Fernando"
+    echo -e ""
+    echo -e "${SOFT_MINT}   GitHub:${WHITE}"
+    echo -e "${POWDER_BLUE}   https://github.com/dani-fernando"
+    echo -e ""
+    echo -e "${PEACH_CREAM}   •••••••••••••••••••••••••••••${RESET}"
+    echo -e "${LAVENDER_DREAM}   Thank you for using Nekofetch! ${RESET}"
+    echo -e ""
+    exit 0
+}
+
+# ✨ Invalid Command Handler
+show_invalid_command() {
+    echo -e "${BABY_PINK}"
+    echo -e "   ⚠️  Command Not Found"
+    echo -e "${PEACH_CREAM}   •••••••••••••••••••••••••••••${RESET}"
+    echo -e ""
+    echo -e "${SOFT_MINT}   The command '${WHITE}$1${SOFT_MINT}' is not recognized."
+    echo -e ""
+    echo -e "${VANILLA}   Please use:"
+    echo -e "   ${POWDER_BLUE}nekofetch${WHITE}          - Show system info"
+    echo -e "   ${POWDER_BLUE}nekofetch --help${WHITE}   - Show help menu"
+    echo -e "   ${POWDER_BLUE}nekofetch -h${WHITE}       - Show help menu"
+    echo -e ""
+    echo -e "${PEACH_CREAM}   •••••••••••••••••••••••••••••${RESET}"
+    echo -e "${LAVENDER_DREAM}   Use 'nekofetch --help' for more information ${RESET}"
+    echo -e ""
+    exit 1
+}
+
+# Check for help options
+if [[ "$1" == "--help" || "$1" == "-h" ]]; then
+    show_help
+fi
+
+# Check for invalid commands
+if [[ $# -gt 0 ]]; then
+    show_invalid_command "$1"
+fi
+
+# ✨ Random Quotes
+QUOTES=(
+  "Nyaa~ your system is purrfect! 🌸"
+  "UwU such a cute machine~ 🎀"
+  "Don't forget to hydrate nya! 💧"
+  "You're doing great today, meow~ ✨"
+  "So sparkly and aesthetic 💫"
+  "Kawaii system detected! 🐾"
+  "Everything looks so fluffy! 🍥"
+  "Sugar, spice and everything nice~ 🧁"
+)
+QUOTE=${QUOTES[$RANDOM % ${#QUOTES[@]}]}
+
+# 🧠 System Info
+OS=$(source /etc/os-release 2>/dev/null && echo "$PRETTY_NAME" || echo "Unknown OS")
+CPU=$(grep -m1 "model name" /proc/cpuinfo | cut -d: -f2 | sed 's/^ *//')
+KERNEL=$(uname -r)
+RAM=$(free -h | grep Mem: | awk '{print $3 " / " $2}')
+SWAP=$(free -h | grep Swap: | awk '{if($2=="0B") print "Disabled"; else print $3 " / " $2}')
+DISK=$(df -h / | awk 'NR==2 {print $3 " / " $2 " (" $5 ")"}')
+SHELL_NAME=$(basename "$SHELL")
+HOSTNAME=$(hostname)
+GPU=$(lspci | grep -E "VGA|3D" | head -n1 | cut -d: -f3- | sed 's/^ //')
+
+# 🐱 ASCII
+echo -e "${BABY_PINK}⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⠔⠒⠒⠒⠦⣤⣀⣀⡀⠀⠀${RESET}"
+echo -e "${BABY_PINK}⠀⠀⠀⠀⠀⠀⠀⠀⡞⠁⢀⣤⣀⠀⠀⠀⠀⠀⠀⠉⠲⣤${RESET}"
+echo -e "${BABY_PINK}⠀⠀⠀⠀⢠⡤⠴⠚⠁⣰⣿⣿⣿⡆⠀⠀⣴⣶⣶⠄⠀⢻        ${COTTON_CANDY}Nekofetch - The Cutest System Info Tool"
+echo -e "${BABY_PINK}⠀⠀⠀⡼⠁⠀⠀⠀⠀⠻⣿⣿⣿⠃⠀⣼⣿⣿⣿⠀⠀⠀⢷⡀${RESET}"
+echo -e "${BABY_PINK}⠀⠀⣼⠁⠀⣤⣶⡄⠀⠀⠈⠉⠁⠀⠀⠈⠛⠊⠁⠀⠀⠀⠀⠙⢦${SOFT_MINT}     Hostname ${WHITE}: ${VANILLA}$HOSTNAME"
+echo -e "${BABY_PINK}⠀⢠⡇⠀⢸⣿⣿⡿⡆⠀⠀⣴⣶⣶⣴⣶⣄⠀⠀⢠⣶⣿⣦⠀⡄${SOFT_MINT}     OS       ${WHITE}: ${VANILLA}$OS" 
+echo -e "${BABY_PINK}⠀⢸⡇⠀⠀⠛⠙⠉⠀⣰⣿⣿⣿⣿⣿⣿⣿⡇⠀⣿⣿⣿⣿⠀⡇${SOFT_MINT}     CPU      ${WHITE}: ${VANILLA}$CPU"
+echo -e "${BABY_PINK}⠀⠈⣇⠀⠀⠀⠀⠀⣰⣿⣿⣿⣿⣿⣿⣷⣿⣷⡀⠀⠉⠉⠀⠀⡟${SOFT_MINT}     GPU      ${WHITE}: ${VANILLA}${GPU:-Unknown}"
+echo -e "${BABY_PINK}⠀⠀⣿⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⡻⠁${SOFT_MINT}    Kernel   ${WHITE}: ${VANILLA}$KERNEL"
+echo -e "${BABY_PINK}⠀⠀⣿⠀⠀⠀⠀⠀⠈⠛⠉⠁⠉⠁⠙⠻⠿⠟⠀⠀⠀⠀⠀⣾⠁${SOFT_MINT}     RAM      ${WHITE}: ${VANILLA}$RAM"
+echo -e "${BABY_PINK}⠀⠀⢸⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡟⠁${SOFT_MINT}     Swap     ${WHITE}: ${VANILLA}$SWAP"
+echo -e "${BABY_PINK}⠀⠀⠀⣻⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠁${SOFT_MINT}      Disk     ${WHITE}: ${VANILLA}$DISK"
+echo -e "${BABY_PINK}⠀⠀⠀⣻⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠁${SOFT_MINT}      Shell    ${WHITE}: ${VANILLA}$SHELL_NAME${RESET}"
+
+# 💬 Quotes
+echo -e "\n${LAVENDER_DREAM} 🎀 ${POWDER_BLUE}${QUOTE}${RESET}\n"
